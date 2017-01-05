@@ -1,6 +1,7 @@
 /*
  * Visualizacao
  */
+var fs = require("fs");
 
 var View = function () {
 	this.filePath = __dirname+"/../view/";

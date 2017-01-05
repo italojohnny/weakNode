@@ -9,8 +9,7 @@ var port = 3000;
 
 server.on("request", function(request, response) {
 	var route = new Route(request);
-
-	response.writeHead(route.status, {"Content-Type":"text/html; charset=utf-8"});
+	response.writeHead(route.statusCode, {"Content-Type":"text/html; charset=utf-8"});
 	response.write(route.getPage());
 	response.end();
 });
