@@ -14,7 +14,7 @@ var Route = function (request) {
 
 	this.fileName;
 	this.functionName;
-	this.inputVars;
+	this.inputVars = request.body;
 
 	this.controller;
 	this.view;
@@ -52,6 +52,8 @@ Route.prototype.setNames = function (file, func, vars) {
 
 	} else if (this.request.method == "POST") {
 		// TODO preciso de ajuda aqui
+
+
 	}
 };
 

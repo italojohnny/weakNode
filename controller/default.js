@@ -2,10 +2,10 @@
  * controller default
  */
 
-module.exports = function index (vars) {
+exports.index = function (vars) {
 	return "default/index.html"
 }
 
-module.exports = function clients (vars) {
+exports.sobre = function (vars) {
 	return "default/clients.html"
 }
