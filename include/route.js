@@ -7,90 +7,67 @@ var Controller = require("./controller");
 var View = require("./view");
 var Error = require("./error");
 
-var Route = function (request) {
-	this.request = request;
+var Route = function(url, metodo, variaveis) {
+	this.url = url;
+	this.metodo = metodo;
 	this.statusCode = 200;
-
-	this.fileName;
-	this.functionName;
-	this._inputVars = "italo";
+	this.fileName = "";
+	this.functionName = "";
+	//this.inputVars = JSON.stringify(variaveis);
+	this.inputVars = variaveis;
 
 	this.controller;
 	this.view;
 	this.error;
 
-	this.analyzeURL(request.url);
-	setTimeout(function(){
-		console.log(this._inputVars + " TESTE");
-	},100);
+	this.analyzeURL();
 };
 
-Route.prototype.analyzeURL = function (url) {
-	console.log("1");
-	this.getVariables(this.request, function() {
-	console.log("2");
-		console.log(this._inputVars);
-		var regexResult;
-		if (regexResult = url.match(/^\/?$/)) {
-			this.fileName = "default";
-			this.functionName = "index";
+Route.prototype.analyzeURL = function () {
+	var regexResult;
+	if (regexResult = this.url.match(/^\/?$/)) {
+		this.fileName = "default";
+		this.functionName = "index";
 
-		} else if (regexResult = url.match(/^\/(\w+)\/(\w+)\/?$/)) {
-			this.fileName = regexResult[1];
-			this.functionName = regexResult[2];
+	} else if (regexResult = this.url.match(/^\/(\w+)\/(\w+)\/?$/)) {
+		this.fileName = regexResult[1];
+		this.functionName = regexResult[2];
 
-		} else if (regexResult = url.match(/^\/(\w+)\/(\w+)\/(.+)\/?$/)) {
-			this.fileName = regexResult[1];
-			this.functionName = regexResult[2];
-			this._inputVars = regexResult[3].split("/");
+	} else if (regexResult = this.url.match(/^\/(\w+)\/(\w+)\/(.+)\/?$/)) {
+		this.fileName = regexResult[1];
+		this.functionName = regexResult[2];
+		this.inputVars = regexResult[3].split("/");
 
-		} else {
-			// TODO melhorar tratamento de erro
-			throw "url solicitada e invalida";
-			this.statusCode = 404;
-		}
-
-	});
+	} else {
+		// TODO melhorar tratamento de erro
+		//throw "url solicitada e invalida";
+		this.statusCode = 404;
+	}
 };
 
-Route.prototype.getVariables = function (request, callback) {
-	console.log("3");
-	//if (request.method == "GET") {
-		//if (typeof(vars) === "string")
-			//this._inputVars = vars.split("/");
-	//	callback();
-
-	//} else if (request.method == "POST") {
-		var body = '';
-		request.on("data", function(chunk){
-			body += chunk;
-		}).on("end", function() {
-			console.log("4");
-			this._inputVars = qs.parse(body);
-			console.log(this._inputVars);
-			console.log("5");
-			callback();
-			console.log("6");
-		});
-	//}
-	console.log(this._inputVars);
+Route.prototype.getPage = function() {
+	return "<ul>" +
+		"<li><a href='/'>home</a></li>" + 
+		"<li><a href='/default/sobre'>sobre</a></li>" + 
+		"<li><a href='/produto/empresa/forip'>empresa</a></li>" + 
+		"<li><a href='/produto/cliente/italo/fisico'>cliente</a></li>" + 
+		"</ul><hr>" +
+		"<form action='/formulario/dados' method='POST'>"+
+		"<input type='text' name='empresa' />" +
+		"<input type='text' name='cliente' />" +
+		"<input type='submit' />" +
+	"<hr>"+this.debuge();
 };
 
-Route.prototype.getPage = function () {
-	return "<h1>URL: "+this.request.url+"</h1>"+
-	"<br/><ul>"+
-	"<li><a href='/default/caso5'>caso5</a></li>" +
-	"</ul>"+
-	"<hr/><form method='POST' action='/default/formulario'>"+
-	"<input type='text' name='empresa' /><br/>"+
-	"<input type='text' name='nome' /><br/>"+
-	"<input type='submit' />"+
-	"</form>";
-};
 
-Route.prototype.debbuging = function () {
-	console.log("\n\n----DEBBUGING ROUTE----");
-	console.log("teste", this._inputVars);
+Route.prototype.debuge = function() {
+	return `<pre>
+         this.url: ${this.url}<br>
+      this.metodo: ${this.metodo}<br>
+  this.statusCode: ${this.statusCode}<br>
+    this.fileName: ${this.fileName}<br>
+this.functionName: ${this.functionName}<br>
+   this.inputVars: ${JSON.stringify(this.inputVars)}<br>
+	</pre>`;
 };
-
 module.exports = Route;
