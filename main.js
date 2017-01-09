@@ -11,7 +11,7 @@ var port = 3000;
 server.on("request", function(request, response, next) {
 
 	request.body = "";
-	var teste = function (request, callback) {
+	var makeBody = function (request, callback) {
 		if (request.method === "POST") {
 			var body = [];
 			request.on("data", function(chunk){
@@ -25,7 +25,7 @@ server.on("request", function(request, response, next) {
 			callback();
 	}
 
-	teste(request, function() {
+	makeBody(request, function() {
 		var route = new Route(request.url, request.method, request.body);
 		response.writeHead(route.statusCode, {"Content-Type":"text/html; charset=utf-8"});
 		response.write(route.getPage());
