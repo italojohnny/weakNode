@@ -6,6 +6,7 @@ var fs = require("fs");
 var View = function () {
 	this.filePath = __dirname+"/../view/";
 	this.fileName;
+	this.finalyPage;
 };
 
 View.prototype.replaceExtend = function () {
@@ -23,5 +24,9 @@ View.prototype.replaceBlock = function () {
 View.prototype.replacePrint = function () {
 	console.log("Replacing prints");
 };
+
+View.prototype.getPage = function() {
+	return "<h1>chegou na view</h1>";
+}
 
 module.exports = View;
