@@ -46,7 +46,7 @@ Route.prototype.evokeControl = function(callback) {
 };
 
 Route.prototype.evokeView = function(callback) {
-	var view = new View();
+	var view = new View("layout.html", [1, 2, 3, 4,5]);
 	this.finalyPage = view.getPage() + this.makePage();
 	callback();
 };

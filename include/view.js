@@ -3,10 +3,20 @@
  */
 var fs = require("fs");
 
-var View = function () {
+var View = function (fileName, inputVars) {
 	this.filePath = __dirname+"/../view/";
-	this.fileName;
+	this.fileName = fileName;
+	this.inputVars = inputVars;
 	this.finalyPage;
+
+	this.readFile(function(){});
+};
+
+
+View.prototype.readFile = function (callback) {
+	this.finalyPage = fs.readFileSync(this.filePath+this.fileName, function () {
+		callback();
+	});
 };
 
 View.prototype.replaceExtend = function () {
@@ -26,7 +36,7 @@ View.prototype.replacePrint = function () {
 };
 
 View.prototype.getPage = function() {
-	return "<h1>chegou na view</h1>";
+	return this.finalyPage.toString();
 }
 
 module.exports = View;
