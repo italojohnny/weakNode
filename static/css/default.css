@@ -1,2 +1,7 @@
-*{margin:0;padding:0;}
-body{color:white;background:gray;}
+h1, h2, h3, h4, a{
+	color:#4CB2D4;
+}
+body{
+	color:#367ABD;
+	background:#30499B;
+}

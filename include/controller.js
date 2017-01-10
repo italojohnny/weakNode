@@ -21,6 +21,7 @@ Controller.prototype.main = function (callback) {
 	else
 		throw "Arquivo '"+ this.fileName +".js' não existe no diretório '"+ this.filePath +"'";
 
+	//TODO padronizar saida do controller
 	if (genericModule[this.functionName])
 		this.output = genericModule[this.functionName](this.inputVariables);
 	else

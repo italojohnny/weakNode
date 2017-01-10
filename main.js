@@ -27,7 +27,7 @@ server.on("request", function(request, response, next) {
 
 	makeBody(request, function() {
 		var route = new Route(request.url, request.method, request.body);
-		response.writeHead(route.statusCode, {"Content-Type":"text/html; charset=utf-8"});
+		response.writeHead(route.statusCode, {"Content-Type": route.contentType});
 		response.write(route.getPage());
 		response.end();
 	});
