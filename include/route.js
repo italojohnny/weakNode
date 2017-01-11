@@ -42,13 +42,13 @@ Route.prototype.evokeControl = function(callback) {
 };
 
 Route.prototype.evokeView = function(callback) {
-	//TODO modularizar os parametros de criacao da view
 	if (this.contentType.match(/html/)) {
-		var view = new View(this.contentType, "layout.html", [1, 2, 3, 4,5]);
+		var view = new View(this.contentType, this.outputCtrl);
 		this.finalyPage = view.getPage() + this.makePage();
 
 	} else {
-		var view = new View(this.contentType, "../static/css/default.css");
+		//TODO tratar isso
+		var view = new View(this.contentType, {file:this.fileName, vars:null});
 		this.finalyPage = view.getPage();
 	}
 	callback();
@@ -82,6 +82,9 @@ Route.prototype.analyzeURL = function (callback) {
 	} else if (regexResult = this.url.match(/^\/static\/(.*\.)(css|js|png|jpg|gif)/)) {
 		this.contentType = this.setContentType(regexResult[2]);
 		this.fileName = regexResult[0];
+		console.log("=======================");
+		console.log(this.contentType);
+		console.log("=======================");
 
 	} else {
 		this.statusCode = 404;
@@ -122,7 +125,7 @@ Route.prototype.makePage = function() {
 		//"<li><a href='/produto/empresa/forip'>empresa</a></li>"+
 		//"<li><a href='/produto/cliente/italo/fisico'>cliente</a></li>"+
 		//"<li><a href='/invalido'>invalido</a></li>"+
-		//"<li><a href='/static/css/default.css'>default.css</a></li>"+
+		"<li><a href='/static/css/default.css'>default.css</a></li>"+
 		"</ul><hr>"+
 		"<form action='/formulario/dados' method='POST'>"+
 		"<input type='text' name='empresa' />"+

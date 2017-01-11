@@ -3,11 +3,11 @@
  */
 var fs = require("fs");
 
-var View = function (contentType, fileName, inputVars) {
-	this.filePath = __dirname+"/../view/";
+var View = function (contentType, inputView) {
+	this.filePath = __dirname+"/../";
 	this.contentType = contentType;
-	this.fileName = fileName;
-	this.inputVars = inputVars;
+	this.fileName = inputView["file"];
+	this.inputVars = inputView["vars"];
 	this.finalyPage;
 
 	this.readFile(function(){
@@ -17,13 +17,22 @@ var View = function (contentType, fileName, inputVars) {
 View.prototype.readFile = function (callback) {
 
 	if (this.contentType.match(/text/)) {
-		this.finalyPage = fs.readFileSync(this.filePath+this.fileName, function () {
+		if (this.fileName) {
+			this.finalyPage = fs.readFileSync(this.filePath+this.fileName, function () {
+				callback();
+			});
+		} else {
+			this.finalyPage = this.inputVars.toString();
 			callback();
-		});
+		}
 
 	} else if (this.contentType.match(/image/)) {
-		throw "ainda nao e possivel ler imagens"
-		callback();
+		//ler arquivo
+		fs.readFile('static/image/forip.png', function(err, data) {
+			//if (err) throw "vou ver isso ainda";
+			this.finalyPage = data;
+			callback();
+		});
 
 	} else {
 		throw "Não há suporte para o conteúdo solicitado";
