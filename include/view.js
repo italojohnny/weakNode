@@ -24,6 +24,10 @@ View.prototype.readFile = function (callback) {
 	} else if (this.contentType.match(/image/)) {
 		throw "ainda nao e possivel ler imagens"
 		callback();
+
+	} else {
+		throw "Não há suporte para o conteúdo solicitado";
+		callback();
 	}
 };
 
