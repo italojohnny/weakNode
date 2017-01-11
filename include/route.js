@@ -106,14 +106,23 @@ Route.prototype.makePage = function() {
 	//this.finalyPage = "<ul>" +
 	return "<ul>"+
 		"<li><a href='/'>home</a></li>"+
-		"<li><a href='/default/index'>index</a></li>"+
-		"<li><a href='/default/index/var/var/var'>index com variavel</a></li>"+
+		//"<li><a href='/default/index'>index</a></li>"+
+		//"<li><a href='/default/index/var/var/var'>index com variavel</a></li>"+
 		"<li><a href='/default/sobre'>sobre</a></li>"+
-		"<li><a href='/default/sobre/var/var/var/var'>sobre com variavel</a></li>"+
-		"<li><a href='/produto/empresa/forip'>empresa</a></li>"+
-		"<li><a href='/produto/cliente/italo/fisico'>cliente</a></li>"+
-		"<li><a href='/invalido'>invalido</a></li>"+
-		"<li><a href='/static/css/default.css'>default.css</a></li>"+
+		//"<li><a href='/default/sobre/var/var/var/var'>sobre com variavel</a></li>"+
+		"<li><a href='/default/teste1'>teste1 - arquivo.html</a></li>"+
+		"<li><a href='/default/teste2'>teste2 - string</a></li>"+
+		"<li><a href='/default/teste3'>teste3 - number</a></li>"+
+		"<li><a href='/default/teste4'>teste4 - boolean</a></li>"+
+		"<li><a href='/default/teste5'>teste5 - array</a></li>"+
+		"<li><a href='/default/teste6'>teste6 - array string</a></li>"+
+		"<li><a href='/default/teste7'>teste7 - array arquivo</a></li>"+
+		"<li><a href='/default/teste8'>teste8 - object</a></li>"+
+		"<li><a href='/default/teste9'>teste9 - object render</a></li>"+
+		//"<li><a href='/produto/empresa/forip'>empresa</a></li>"+
+		//"<li><a href='/produto/cliente/italo/fisico'>cliente</a></li>"+
+		//"<li><a href='/invalido'>invalido</a></li>"+
+		//"<li><a href='/static/css/default.css'>default.css</a></li>"+
 		"</ul><hr>"+
 		"<form action='/formulario/dados' method='POST'>"+
 		"<input type='text' name='empresa' />"+
