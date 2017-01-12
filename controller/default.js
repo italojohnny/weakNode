@@ -3,7 +3,6 @@
  */
 
 exports.index = function (vars) {
-	console.log("ENTROU NA CONTROLLER DEFAULT/INDEX");
 	return "default/index.html";
 }
 

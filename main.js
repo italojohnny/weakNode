@@ -28,8 +28,13 @@ server.on("request", function(request, response, next) {
 	makeBody(request, function() {
 		var route = new Route(request.url, request.method, request.body);
 		response.writeHead(route.statusCode, {"Content-Type": route.contentType});
-		response.write(route.getPage());
-		response.end();
+
+		if (route.contentType.match(/text/)) {
+			response.write(route.getPage());
+			response.end();
+
+		} else
+			response.end(route.getPage());
 	});
 });
 

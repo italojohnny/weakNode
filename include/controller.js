@@ -10,7 +10,6 @@ var Controller = function (fileName, functionName, inputVariables) {
 	this.functionName = functionName;
 	this.inputVariables = inputVariables;
 	this.output = {};
-	console.log("entrou na controller");
 
 	this.main(function() {});
 	this.standardizeOutput(function() {});

@@ -18,7 +18,7 @@ View.prototype.readFile = function (callback) {
 
 	if (this.contentType.match(/text/)) {
 		if (this.fileName) {
-			this.finalyPage = fs.readFileSync(this.filePath+this.fileName, function () {
+			this.finalyPage = fs.readFileSync(this.filePath + this.fileName, function () {
 				callback();
 			});
 		} else {
@@ -27,16 +27,16 @@ View.prototype.readFile = function (callback) {
 		}
 
 	} else if (this.contentType.match(/image/)) {
-		//ler arquivo
-		fs.readFile('static/image/forip.png', function(err, data) {
-			//if (err) throw "vou ver isso ainda";
-			this.finalyPage = data;
-			callback();
-		});
+		if (fs.existsSync("." + this.fileName)) {
+			this.finalyPage = fs.readFileSync("." + this.fileName, function () {
+				callback();
+			});
+		} else {
+			throw `Arquivo ".${this.fileName}" não foi encontrado.`;
+		}
 
 	} else {
 		throw "Não há suporte para o conteúdo solicitado";
-		callback();
 	}
 };
 
@@ -57,7 +57,7 @@ View.prototype.replacePrint = function () {
 };
 
 View.prototype.getPage = function() {
-	return this.finalyPage.toString();
+	return this.finalyPage;
 }
 
 module.exports = View;
