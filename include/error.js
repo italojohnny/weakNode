@@ -25,21 +25,3 @@ Error.prototype.savePage = function () {
 };
 
 module.exports = Error;
-
-/*
-var http = require("http");
-var fs = require("fs");
-var d = new Date();
-var fileName = new Date(+d - d.getTimezoneOffset() *60*1000).toISOString().split(/[TZ]/).slice(0, 2).join('').replace(/-|:|\./g, '') + ".html";
-
-http.get("http://loripsum.net/api/5/", function(res){
-	var text = "";
-	res.on("data", function(chunk){
-		text += chunk;
-	}).on("end", function(){
-		fs.writeFile(fileName, text, function(){
-			console.log("arquivo "+fileName+" pronto");
-		});
-	});
-});
-*/
