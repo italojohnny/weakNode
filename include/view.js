@@ -8,6 +8,7 @@ var View = function (contentType, inputView) {//{{{
 	this.contentType = contentType;
 	this.fileName = inputView["file"];
 	this.inputVars = inputView["vars"];
+	this.auxPath; // TODO refatorar logica de replaceExtend e replaceInclude para essa variavel nao ser mais necessaria
 	this.finalyPage;
 
 	this.readFile(function(){
@@ -54,23 +55,27 @@ View.prototype.replaceExtend = function (callback) {//{{{
 	var fileAux1 = this.finalyPage.toString();
 	var fileAux2;
 
+	// TODO existe a possibilidade do codigo quebrar se estiver usando
+	// aspas-simples (usando os indices dos grupos casados no resultado). Pode
+	// ser corrigindo removendo as aspas dupas ou simples do primeiro grupo
 	var erExtend = /<!--\[\[extends (\"(.*)\"|\'(.*)\')\]\]-->/;
 	var erBlocks = /<!--\[\[block \w*\]\]-->/g; //para encontrar todo os blocos
 	var erKeyBlock = /<!--\[\[block (\w*)\]\]-->/; //para encontrar a chave do primeiro bloco
 
 	var result;
 
-	if (result = fileAux1.match(erExtend)) {
-		if (fs.existsSync(caminho + result[2])) {
-			fileAux2 = fs.readFileSync(caminho + result[2], function () {});
+	if (result = fileAux1.match(erExtend)[2]) {
+		if (fs.existsSync(caminho + result)) {
+			fileAux2 = fs.readFileSync(caminho + result, function () {});
 			fileAux2 = fileAux2.toString();
 
 			var qtd = fileAux2.match(erBlocks).length;
 			for (i = 0; i < qtd; i++)
 				fileAux2 = fileAux2.replace(fileAux2.match(erKeyBlock)[0], this.getBlock(fileAux2.match(erKeyBlock)[1]));
 			this.finalyPage = fileAux2;
+			this.auxPath = caminho + result;
 
-		} else throw `Erro durante processo de extender arquivo: "${result[2]}".`;
+		} else throw `Erro durante processo de extensão de arquivo:\nNão foi possivel abrir "${caminho}${result}".`;
 	}
 	callback(this);
 };
@@ -85,11 +90,31 @@ View.prototype.getBlock = function (nameBlock) {
 };//}}}
 
 View.prototype.replaceInclude = function (callback) {
-	console.log("Replacing includes");
-	//percorre arquivo principal (ja com as alteracoes de replaceExtend)
-	//procura por key include e injeta o conteudo do arquivo indicado nessa regiao do arquivo principal
-	//
-	//evoca replacePrint
+	var caminho = this.auxPath.replace(/\/\w*\.html$/,'') + '/';
+	var fileAux1 = this.finalyPage.toString();
+	var fileAux2;
+
+	// TODO existe a possibilidade do codigo quebrar se estiver usando
+	// aspas-simples (usando os indices dos grupos casados no resultado). Pode
+	// ser corrigindo removendo as aspas dupas ou simples do primeiro grupo
+	var erIncludes = /<!--\[\[\include (\"(.*)\"|\'(.*)\')\]\]-->/g; //para encontrar todos os includes que existirem
+	var erKeyInclude = /<!--\[\[\include (\"(.*)\"|\'(.*)\')\]\]-->/; //para pegar o arquivo da key include
+	var result;
+
+	var qtd = 0;
+	if (qtd = fileAux1.match(erIncludes))
+		qtd = qtd.length;
+
+	for (i = 0; i < qtd; i++) {
+		if (result = fileAux1.match(erKeyInclude)[2]) { // TODO revisar essa regex
+			if (fs.existsSync(caminho + result)) {
+				fileAux2 = fs.readFileSync(caminho + result, function () {}).toString();
+				fileAux1 = fileAux1.replace(erKeyInclude, fileAux2)
+
+			} else throw `Erro durante processo de inclusao de arquivo:\nNão foi possivel abrir "${caminho}${result}".`;
+		} else console.log("nao deu" + fileAux1.match(erKeyInclude)[2]);
+	}
+	this.finalyPage = fileAux1;
 	callback();
 };
 
