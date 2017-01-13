@@ -32,7 +32,7 @@ View.prototype.readFile = function (callback) {
 		}
 
 	} else if (this.contentType.match(/image/)) {
-		if (fs.existsSync("." + this.fileName)) {
+		if (fs.existsSync('.' + this.fileName)) {
 			this.finalyPage = fs.readFileSync("." + this.fileName, function () {
 				//callback();
 			});
@@ -48,13 +48,31 @@ View.prototype.readFile = function (callback) {
 
 View.prototype.replaceExtend = function (callback) {
 	//console.log(this.finalyPage.toString());
-	var italo;
-	if (italo = this.finalyPage.toString().match(/extends/)) //TODO comecar por aqui
-		console.log(italo[0]);
-	else
+	var testeExtend;
+	var testeBlock;
+	var fileAux;
+	var keyBlock;
+	var caminho = this.filePath + this.fileName.replace(/\/\w*\.html$/,'') + '/';
+	var erExtend = /<!--\[\[extends (\"(.*)\"|\'(.*)\')\]\]-->/;
+	var erBlock = /<!--\[\[block (\w*)\]\]-->/;
+
+	if (testeExtend = this.finalyPage.toString().match(erExtend)) {
+		if (fs.existsSync(caminho + testeExtend[2])) {
+			fileAux = fs.readFileSync(caminho + testeExtend[2], function () {});
+
+			//TODO encontrar uma forma de testar a regex, alterar e continuar ate terminar o arquivo
+			if (testeBlock = fileAux.toString().match(erBlock)) {
+				keyBlock = testeBlock[1];
+			}
+			console.log(this.getBlock(keyBlock));
+
+		} else {
+			throw `Erro durante processo de extender arquivo: "${testeExtend[2]}".`;
+		}
+	} else
 		console.log("Replacing extends");
-	//procurar pela key extend
-	//carrega em uma variavel local auxiliar o arquivo indicado
+	//{OK} procurar pela key extend
+	//{OK} carrega em uma variavel local auxiliar o arquivo indicado
 	//procura no arquivo auxiliar keys block
 	//evoca replaceblock passando o block, e substitui o block encontrado quando o retorno for diferente de null
 	//repete ate terminar o arquivo
@@ -64,12 +82,13 @@ View.prototype.replaceExtend = function (callback) {
 	callback();
 };
 
-View.prototype.replaceBlock = function (nameBlock) {
-	console.log("Replacing blocks");
-	//procura o nameBlock no arquivo principal
-	//retorna o texto que estiver contido nesse bloco
+View.prototype.getBlock = function (nameBlock) {
+	var erResult;
+	var erBlock = new RegExp("<!--\\[\\[block "+ nameBlock +"\\]\\]-->\(.\|\\s\)*?<!--\\[\\[endblock\\]\\]-->", "gm");
 
-	return "block";
+	if (erResult = this.finalyPage.toString().match(erBlock))
+		return erResult[0].slice(17+nameBlock.length, erResult.length-20);
+	return '';
 };
 
 View.prototype.replaceInclude = function (callback) {
