@@ -3,7 +3,7 @@
  */
 var fs = require("fs");
 
-var View = function (contentType, inputView) {
+var View = function (contentType, inputView) {//{{{
 	this.filePath = __dirname+"/../";
 	this.contentType = contentType;
 	this.fileName = inputView["file"];
@@ -22,8 +22,10 @@ View.prototype.readFile = function (callback) {
 				//callback();
 			});
 			if (this.contentType.match(/html/)) {
-				this.replaceExtend(function() {
-					// TODO verificar assincronidade
+				this.replaceExtend(function(that) {
+					that.replaceInclude(function() {
+
+					});
 				});
 			}
 		} else {
@@ -44,42 +46,33 @@ View.prototype.readFile = function (callback) {
 		throw "Não há suporte para o conteúdo solicitado";
 	}
 	callback();
-};
+};//}}}
 
-View.prototype.replaceExtend = function (callback) {
+View.prototype.replaceExtend = function (callback) {//{{{
 	//console.log(this.finalyPage.toString());
-	var testeExtend;
-	var testeBlock;
-	var fileAux;
-	var keyBlock;
 	var caminho = this.filePath + this.fileName.replace(/\/\w*\.html$/,'') + '/';
+	var fileAux1 = this.finalyPage.toString();
+	var fileAux2;
+
 	var erExtend = /<!--\[\[extends (\"(.*)\"|\'(.*)\')\]\]-->/;
-	var erBlock = /<!--\[\[block (\w*)\]\]-->/;
+	var erBlocks = /<!--\[\[block \w*\]\]-->/g; //para encontrar todo os blocos
+	var erKeyBlock = /<!--\[\[block (\w*)\]\]-->/; //para encontrar a chave do primeiro bloco
 
-	if (testeExtend = this.finalyPage.toString().match(erExtend)) {
-		if (fs.existsSync(caminho + testeExtend[2])) {
-			fileAux = fs.readFileSync(caminho + testeExtend[2], function () {});
+	var result;
 
-			//TODO encontrar uma forma de testar a regex, alterar e continuar ate terminar o arquivo
-			if (testeBlock = fileAux.toString().match(erBlock)) {
-				keyBlock = testeBlock[1];
-			}
-			console.log(this.getBlock(keyBlock));
+	if (result = fileAux1.match(erExtend)) {
+		if (fs.existsSync(caminho + result[2])) {
+			fileAux2 = fs.readFileSync(caminho + result[2], function () {});
+			fileAux2 = fileAux2.toString();
 
-		} else {
-			throw `Erro durante processo de extender arquivo: "${testeExtend[2]}".`;
-		}
-	} else
-		console.log("Replacing extends");
-	//{OK} procurar pela key extend
-	//{OK} carrega em uma variavel local auxiliar o arquivo indicado
-	//procura no arquivo auxiliar keys block
-	//evoca replaceblock passando o block, e substitui o block encontrado quando o retorno for diferente de null
-	//repete ate terminar o arquivo
-	//
-	//evoca replaceInclude
+			var qtd = fileAux2.match(erBlocks).length;
+			for (i = 0; i < qtd; i++)
+				fileAux2 = fileAux2.replace(fileAux2.match(erKeyBlock)[0], this.getBlock(fileAux2.match(erKeyBlock)[1]));
+			this.finalyPage = fileAux2;
 
-	callback();
+		} else throw `Erro durante processo de extender arquivo: "${result[2]}".`;
+	}
+	callback(this);
 };
 
 View.prototype.getBlock = function (nameBlock) {
@@ -89,7 +82,7 @@ View.prototype.getBlock = function (nameBlock) {
 	if (erResult = this.finalyPage.toString().match(erBlock))
 		return erResult[0].slice(17+nameBlock.length, erResult.length-20);
 	return '';
-};
+};//}}}
 
 View.prototype.replaceInclude = function (callback) {
 	console.log("Replacing includes");
@@ -100,7 +93,7 @@ View.prototype.replaceInclude = function (callback) {
 	callback();
 };
 
-View.prototype.replacePrint = function (callback) {
+View.prototype.replacePrint = function (callback) {//{{{
 	console.log("Replacing prints");
 	//precorre arquivo principal (ja com as alteracoes de replaceInclude)
 	//procura por key print e substitui pela variavel referente indicada na key
@@ -112,6 +105,6 @@ View.prototype.getPage = function(callback) {
 	return this.finalyPage;
 
 	callback();
-}
+}//}}}
 
 module.exports = View;
