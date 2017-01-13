@@ -1,7 +1,17 @@
-h1, h2, h3, h4, a{
-	color:#4CB2D4;
+*{margin:0; padding:0;}
+html, body {height:100%;}
+
+#head {
+	background:gray;
+	height:50px;
+	width:100%;
+	border-bottom:1px solid black;
+	position:fixed;
+	top:0;left:0;
 }
-body{
-	color:#367ABD;
-	background:#30499B;
+
+#body {
+	margin-top:50px;
+	background:silver;
+	height:100%;
 }

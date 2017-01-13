@@ -3,7 +3,7 @@
  */
 
 exports.index = function (vars) {
-	return "default/index.html";
+	return "default/index.html"; //TODO retornando para layout.html, erro
 }
 
 exports.sobre = function (vars) {

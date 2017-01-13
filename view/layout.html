@@ -8,20 +8,13 @@
 		<script type="text/javascript" src="/static/js/vue.min.js"></script>
 	</head>
 	<body>
-		<div id="all">
-			<div class="box" id="box1">
-				<!--[[block cabecalho]]-->
+			<div class="box" id="head">cabecalho</div>
+			<div class="box" id="body">
+				<div class="box" id="menu">menu</div>
+				<div class="box" id="">
+					<div>conteudo</div>
+					<div>rodape</div>
+				</div>
 			</div>
-			<div class="box" id="box2">
-				<!--[[include "menu.html"]]-->
-			</div>
-			<div class="box" id="box3">
-				<!--[[block conteudo]]-->
-			</div>
-			<div class="box" id="box4">
-				<!--[[include rodape.html]]-->
-			</div>
-		</div>
-		<!--[[block script]]-->
 	</body>
 </html>

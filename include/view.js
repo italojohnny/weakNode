@@ -24,8 +24,9 @@ View.prototype.readFile = function (callback) {
 			});
 			if (this.contentType.match(/html/)) {
 				this.replaceExtend(function(that) {
-					that.replaceInclude(function() {
-
+					that.replaceInclude(function(that) {
+						that.replacePrint(function() {
+						});
 					});
 				});
 			}
@@ -69,7 +70,10 @@ View.prototype.replaceExtend = function (callback) {//{{{
 			fileAux2 = fs.readFileSync(caminho + result, function () {});
 			fileAux2 = fileAux2.toString();
 
-			var qtd = fileAux2.match(erBlocks).length;
+			var qtd = 0;
+			if (qtd = fileAux2.match(erBlocks))
+				qtd = qtd.length;
+
 			for (i = 0; i < qtd; i++)
 				fileAux2 = fileAux2.replace(fileAux2.match(erKeyBlock)[0], this.getBlock(fileAux2.match(erKeyBlock)[1]));
 			this.finalyPage = fileAux2;
@@ -89,7 +93,7 @@ View.prototype.getBlock = function (nameBlock) {
 	return '';
 };//}}}
 
-View.prototype.replaceInclude = function (callback) {
+View.prototype.replaceInclude = function (callback) {//{{{
 	var caminho = this.auxPath.replace(/\/\w*\.html$/,'') + '/';
 	var fileAux1 = this.finalyPage.toString();
 	var fileAux2;
@@ -115,18 +119,34 @@ View.prototype.replaceInclude = function (callback) {
 		} else console.log("nao deu" + fileAux1.match(erKeyInclude)[2]);
 	}
 	this.finalyPage = fileAux1;
-	callback();
-};
+	callback(this);
+};//}}}
 
-View.prototype.replacePrint = function (callback) {//{{{
-	console.log("Replacing prints");
+View.prototype.replacePrint = function (callback) {
+
+	var fileAux1 = this.finalyPage.toString();
+	var fileAux2;
+
+	var erPrints = /<!--\[\[print .+\]\]-->/g;
+	var erKeyPrint = /<!--\[\[print (.+)\]\]-->/;
+	var result;
+
+	var qtd = 0;
+	if (qtd = fileAux1.match(erPrints))
+		qtd = qtd.length;
+	for (i = 0; i < qtd; i++) {
+		result = fileAux1.match(erKeyPrint);
+		console.log(this.inputVars);
+
+	}
 	//precorre arquivo principal (ja com as alteracoes de replaceInclude)
 	//procura por key print e substitui pela variavel referente indicada na key
+	this.finalyPage = fileAux1;
 
 	callback();
 };
 
-View.prototype.getPage = function(callback) {
+View.prototype.getPage = function(callback) {//{{{
 	return this.finalyPage;
 
 	callback();
