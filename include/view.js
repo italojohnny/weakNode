@@ -3,8 +3,11 @@
  */
 var fs = require("fs");
 
-var View = function (contentType, inputView) {//{{{
-	this.filePath = __dirname+"/../";
+var View = function (contentType, inputView) {
+	if (contentType.match(/html/))
+		this.filePath = __dirname+"/../view/";
+	else
+		this.filePath = __dirname+"/..";
 	this.contentType = contentType;
 	this.fileName = inputView["file"];
 	this.inputVars = inputView["vars"];
@@ -16,56 +19,38 @@ var View = function (contentType, inputView) {//{{{
 };
 
 View.prototype.readFile = function (callback) {
-
 	if (this.contentType.match(/text/)) {
 		if (this.fileName) {
-			this.finalyPage = fs.readFileSync(this.filePath + this.fileName, function () {
-				//callback();
-			});
+			this.finalyPage = fs.readFileSync(this.filePath + this.fileName, function () {});
 			if (this.contentType.match(/html/)) {
-				this.replaceExtend(function(that) {
-					that.replaceInclude(function(that) {
-						that.replacePrint(function() {
-						});
-					});
-				});
+				try { this.replaceExtend(function(that) {
+					try { that.replaceInclude(function(that) {
+						try { that.replacePrint(function() {
+						}); } catch (e) { throw `Print > ${e}`; }
+					}); } catch (e) { throw `Include > ${e}`; }
+				}); } catch (e) { throw `Extend > ${e}`; }
 			}
-		} else {
-			this.finalyPage = this.inputVars.toString();
-			//callback();
-		}
-
+		} else this.finalyPage = this.inputVars.toString();
 	} else if (this.contentType.match(/image/)) {
 		if (fs.existsSync('.' + this.fileName)) {
-			this.finalyPage = fs.readFileSync("." + this.fileName, function () {
-				//callback();
-			});
-		} else {
-			throw `Arquivo ".${this.fileName}" não foi encontrado.`;
-		}
-
-	} else {
-		throw "Não há suporte para o conteúdo solicitado";
-	}
+			this.finalyPage = fs.readFileSync("." + this.fileName, function () {});
+		} else throw `Arquivo ".${this.fileName}" não foi encontrado.`;
+	} else throw "Não há suporte para o conteúdo solicitado";
 	callback();
-};//}}}
+};
 
-View.prototype.replaceExtend = function (callback) {//{{{
-	//console.log(this.finalyPage.toString());
+View.prototype.replaceExtend = function (callback) {
 	var caminho = this.filePath + this.fileName.replace(/\/\w*\.html$/,'') + '/';
 	var fileAux1 = this.finalyPage.toString();
 	var fileAux2;
 
-	// TODO existe a possibilidade do codigo quebrar se estiver usando
-	// aspas-simples (usando os indices dos grupos casados no resultado). Pode
-	// ser corrigindo removendo as aspas dupas ou simples do primeiro grupo
 	var erExtend = /<!--\[\[extends (\"(.*)\"|\'(.*)\')\]\]-->/;
 	var erBlocks = /<!--\[\[block \w*\]\]-->/g; //para encontrar todo os blocos
 	var erKeyBlock = /<!--\[\[block (\w*)\]\]-->/; //para encontrar a chave do primeiro bloco
+	var result = fileAux1.match(erExtend);
 
-	var result;
-
-	if (result = fileAux1.match(erExtend)[2]) {
+	if (result) {
+		result = result[1].toString().replace(/\'|\"/g,'');
 		if (fs.existsSync(caminho + result)) {
 			fileAux2 = fs.readFileSync(caminho + result, function () {});
 			fileAux2 = fileAux2.toString();
@@ -91,26 +76,27 @@ View.prototype.getBlock = function (nameBlock) {
 	if (erResult = this.finalyPage.toString().match(erBlock))
 		return erResult[0].slice(17+nameBlock.length, erResult.length-20);
 	return '';
-};//}}}
+};
 
-View.prototype.replaceInclude = function (callback) {//{{{
-	var caminho = this.auxPath.replace(/\/\w*\.html$/,'') + '/';
+View.prototype.replaceInclude = function (callback) {
+	var caminho
+	if (this.auxPath)
+		caminho = this.auxPath.replace(/\/\w*\.html$/,'') + '/';
+	else
+		caminho = __dirname + "/../view/";
+
 	var fileAux1 = this.finalyPage.toString();
 	var fileAux2;
 
-	// TODO existe a possibilidade do codigo quebrar se estiver usando
-	// aspas-simples (usando os indices dos grupos casados no resultado). Pode
-	// ser corrigindo removendo as aspas dupas ou simples do primeiro grupo
 	var erIncludes = /<!--\[\[\include (\"(.*)\"|\'(.*)\')\]\]-->/g; //para encontrar todos os includes que existirem
 	var erKeyInclude = /<!--\[\[\include (\"(.*)\"|\'(.*)\')\]\]-->/; //para pegar o arquivo da key include
-	var result;
+	var result = fileAux1.match(erKeyInclude);
 
 	var qtd = 0;
-	if (qtd = fileAux1.match(erIncludes))
-		qtd = qtd.length;
-
+	if (qtd = fileAux1.match(erIncludes)) qtd = qtd.length;
 	for (i = 0; i < qtd; i++) {
-		if (result = fileAux1.match(erKeyInclude)[2]) { // TODO revisar essa regex
+		if (result) {
+			result = result[1].toString().replace(/\'|\"/g, '');
 			if (fs.existsSync(caminho + result)) {
 				fileAux2 = fs.readFileSync(caminho + result, function () {}).toString();
 				fileAux1 = fileAux1.replace(erKeyInclude, fileAux2)
@@ -120,36 +106,30 @@ View.prototype.replaceInclude = function (callback) {//{{{
 	}
 	this.finalyPage = fileAux1;
 	callback(this);
-};//}}}
+};
 
 View.prototype.replacePrint = function (callback) {
-
 	var fileAux1 = this.finalyPage.toString();
-	var fileAux2;
-
 	var erPrints = /<!--\[\[print .+\]\]-->/g;
 	var erKeyPrint = /<!--\[\[print (.+)\]\]-->/;
 	var result;
-
 	var qtd = 0;
-	if (qtd = fileAux1.match(erPrints))
-		qtd = qtd.length;
+	if (qtd = fileAux1.match(erPrints)) qtd = qtd.length;
 	for (i = 0; i < qtd; i++) {
 		result = fileAux1.match(erKeyPrint);
-		console.log(this.inputVars);
-
+		if (result) {
+			result = result[1];
+			if (this.inputVars && typeof(this.inputVars) === "object" && result in this.inputVars) {
+				fileAux1 = fileAux1.replace(erKeyPrint, this.inputVars[result]);
+			} else throw `Erro durante processo de impressão das variaveis.\nA página está esperando pela variavel "${result}".`;
+		}
 	}
-	//precorre arquivo principal (ja com as alteracoes de replaceInclude)
-	//procura por key print e substitui pela variavel referente indicada na key
 	this.finalyPage = fileAux1;
-
 	callback();
 };
 
-View.prototype.getPage = function(callback) {//{{{
+View.prototype.getPage = function() {
 	return this.finalyPage;
-
-	callback();
-}//}}}
+}
 
 module.exports = View;

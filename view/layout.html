@@ -2,19 +2,24 @@
 <html lang="pt-br">
 	<head>
 		<meta charset="utf-8">
-		<title>teste</title>
+		<title>weake</title>
 		<link type="text/css" rel="stylesheet" href="/static/css/default.css" />
-		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
-		<script type="text/javascript" src="/static/js/vue.min.js"></script>
 	</head>
 	<body>
-			<div class="box" id="head">cabecalho</div>
-			<div class="box" id="body">
-				<div class="box" id="menu">menu</div>
-				<div class="box" id="">
-					<div>conteudo</div>
-					<div>rodape</div>
-				</div>
+
+		<div id="default-header">botao, titulo, logout</div>
+		<div id="default-body">
+			<div id="default-body-menu"><!--[[include "menu.html"]]--></div>
+			<div id="default-body-frame">
+				<div id="default-body-frame-content"><!--[[block conteudo]]--></div>
+				<div id="default-body-frame-footer">rodape</div>
 			</div>
+		</div>
+
+		<script type="text/javascript" src="/static/js/responsive-theme-defaut.js"></script>
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/vue.min.js"></script>
+		<!--[[#block script]]-->
+
 	</body>
 </html>
