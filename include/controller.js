@@ -5,7 +5,7 @@
 var fs = require("fs");
 
 var Controller = function (fileName, functionName, inputVariables) {
-	this.filePath = __dirname+"/../controller/";
+	this.filePath = __dirname+"/../app/controller/";
 	this.fileName = fileName;
 	this.functionName = functionName;
 	this.inputVariables = inputVariables;

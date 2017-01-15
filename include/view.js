@@ -5,9 +5,9 @@ var fs = require("fs");
 
 var View = function (contentType, inputView) {
 	if (contentType.match(/html/))
-		this.filePath = __dirname+"/../view/";
+		this.filePath = __dirname+"/../app/view/";
 	else
-		this.filePath = __dirname+"/..";
+		this.filePath = __dirname+"/../app";
 	this.contentType = contentType;
 	this.fileName = inputView["file"];
 	this.inputVars = inputView["vars"];
@@ -83,7 +83,7 @@ View.prototype.replaceInclude = function (callback) {
 	if (this.auxPath)
 		caminho = this.auxPath.replace(/\/\w*\.html$/,'') + '/';
 	else
-		caminho = __dirname + "/../view/";
+		caminho = __dirname + "/../app/view/";
 
 	var fileAux1 = this.finalyPage.toString();
 	var fileAux2;
