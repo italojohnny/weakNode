@@ -1,6 +1,7 @@
 /*
  * controller default
  */
+var Actor = require("../class/actor");
 
 exports.index = function (vars) {
 	return {render:"default/index.html", var1:"italo", var2:"johnny", var3:"dos anjos"};
@@ -11,7 +12,6 @@ exports.sobre = function (vars) {
 }
 
 exports.teste1 = function () {
-	//TODO retornando para layout.html, erro
 	return "layout.html";
 }
 
@@ -44,9 +44,15 @@ exports.teste8 = function () {
 }
 
 exports.teste9 = function () {
+	var actor = new Actor();
+
+	actor.setFirstName("naruto");
+	var nome = actor.getFirstName();
+	var result = actor.teste(function(){});
+
 	var teste = "gato";
 	for (i = 0; i < 10; i++)
 		teste += " cachorro";
 
-	return {render:"default/index.html", var1:"var1", var2:teste, var3:false};
+	return {render:"default/index.html", var1:result, var2:teste, var3:nome};
 }

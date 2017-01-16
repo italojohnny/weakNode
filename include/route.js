@@ -28,7 +28,7 @@ var Route = function(url, metodo, variaveis) {
 
 			});} catch (e) { that.makeError("View", "500", e, function(){}); }
 
-		});} catch (e){ that.makeError("Controller", "500", e, function(){}); }
+		});} catch (e){ that.makeError("Controller", "500", e.message+"\n\n"+e.stack, function(){}); }
 
 	});} catch (e) { this.makeError("Route", "500", e, function(){}); }
 };
