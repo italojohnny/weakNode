@@ -1,58 +1,43 @@
 /*
  * controller default
  */
-var Actor = require("../class/actor");
+var Actor = require("../class/actor");//{{{
 
 exports.index = function (vars) {
 	return {render:"default/index.html", var1:"italo", var2:"johnny", var3:"dos anjos"};
 }
-
-exports.sobre = function (vars) {
-	return "default/sobre.html";
+exports.sobre = function (req, res) { res("default/sobre.html"); }
+exports.teste1 = function (req, res) { res("layout.html"); }
+exports.teste2 = function (req, res) { res("italo"); }
+exports.teste3 = function (req, res) { res(16); }
+exports.teste4 = function (req, res) { res(false); }
+exports.teste5 = function (req, res) { res([1, 2, 3, 4, 5]); }
+exports.teste6 = function (req, res) { res(["johnny", 2, 3, 4, 5]); }
+exports.teste7 = function (req, res) { res(["layout.html", 2, 3, 4, 5]); }
+exports.teste8 = function (req, res) {
+	res({render: "default/index.html", var1:"var1", var2:JSON.stringify([{a:1,b:2},{a:3,b:4}]), var3:false});
 }
 
-exports.teste1 = function () {
-	return "layout.html";
+exports.teste9 = function (req, res) {
+	var john = new Actor();
+	var nome = john.getFirstName();
+	var email = john.getEmail();
+	var teste;
+	john.teste(function(dados) {
+		console.log(dados);
+		teste = dados;
+		//res.render({render:"default/index.html", var1:teste, var2:email, var3:nome});
+	});
+	res({render:"default/index.html", var1:teste, var2:email, var3:nome});
 }
-
-exports.teste2 = function () {
-	return "italo";
-}
-
-exports.teste3 = function () {
-	return 16;
-}
-
-exports.teste4 = function () {
-	return false;
-}
-
-exports.teste5 = function () {
-	return [1, 2, 3, 4, 5];
-}
-
-exports.teste6 = function () {
-	return ["johnny", 2, 3, 4, 5];
-}
-
-exports.teste7 = function () {
-	return ["layout.html", 2, 3, 4, 5];
-}
-
-exports.teste8 = function () {
-	return {render: "default/index.html", var1:"var1", var2:1, var3:false};
-}
-
-exports.teste9 = function () {
-	var actor = new Actor();
-
-	actor.setFirstName("naruto");
-	var nome = actor.getFirstName();
-	var result = actor.teste(function(){});
-
-	var teste = "gato";
-	for (i = 0; i < 10; i++)
-		teste += " cachorro";
-
-	return {render:"default/index.html", var1:result, var2:teste, var3:nome};
+//}}}
+exports.teste = function (request, response) {
+	var john = new Actor();
+	var nome = john.getFirstName();
+	var email = john.getEmail();
+	var teste;
+	john.teste(function(dados){
+		teste = dados;
+	});
+	response({render:"default/index.html", var1:teste, var2:email, var3:nome});
 }

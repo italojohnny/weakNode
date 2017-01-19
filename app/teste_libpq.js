@@ -1,15 +1,15 @@
 var Libpq = require("libpq");
 var pq = new Libpq();
 
-var user = "admteste";
-var pswd = "senha1234";
-var host = "192.168.1.104";
+var user = "";
+var pswd = "";
+var host = "";
 var port = "5432";
-var bank = "bancodedados"; 
+var bank = ""; 
 var conString = `postgres://${user}:${pswd}@${host}:${port}/${bank}`;
 
 pq.connect(conString, function(){
-	pq.exec("select * from actor");
+	pq.exec("select * from f_bilhetes_chamadas limit 1000");
 	
 	var arrayResult = [];
 	for (var i = 0; i < pq.ntuples(); i++) {
