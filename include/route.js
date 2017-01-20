@@ -6,30 +6,22 @@ var Controller = require("./controller");
 var View = require("./view");
 var Error = require("./error");
 
-var Route = function(url, metodo, variaveis) {
+var Route = function (url, metodo, variaveis) {
 	this.url = url;
 	this.metodo = metodo;
 	this.statusCode = 200;
 	this.contentType;
-
 	this.fileName = "";
 	this.functionName = "";
 	this.inputVars = variaveis;
-
 	this.outputCtrl;
-
 	this.finalyPage = "";
 
 	try { this.analyzeURL(function(that) {
-
 		try { that.evokeControl(function(that) {
-
 			try { that.evokeView(function(that) {
-
 			});} catch (e) { that.makeError("View", "500", e, function(){}); }
-
 		});} catch (e){ that.makeError("Controller", "500", e.message+"\n\n"+e.stack, function(){}); }
-
 	});} catch (e) { this.makeError("Route", "500", e, function(){}); }
 };
 
@@ -44,7 +36,6 @@ Route.prototype.evokeControl = function(callback) {
 Route.prototype.evokeView = function(callback) {
 	if (this.contentType.match(/html/)) {
 		var view = new View(this.contentType, this.outputCtrl);
-		//this.finalyPage = view.getPage() + this.makePage();
 		this.finalyPage = view.getPage();
 
 	} else {
@@ -95,7 +86,8 @@ Route.prototype.setContentType = function (type) {
 		case "html": return "text/html; charset=utf-8";
 		case  "css": return "text/css; charset=utf-8";
 		case   "js": return "text/javascript; charset=utf-8";
-		case  "jpg": return "image/jpeg";
+		case  "jpg":
+		case "jpeg": return "image/jpeg";
 		case  "gif": return "image/gif";
 		case  "png": return "image/png";
 	}
