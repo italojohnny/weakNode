@@ -3,11 +3,11 @@ var Libpq = require("libpq");
 var pq = new Libpq();
 
 var DB = function() {
-	var user = "";
-	var pswd = "";
-	var host = "";
+	var user = "forip";
+	var pswd = "yma2578k";
+	var host = "192.168.100.253";
 	var port = "5432";
-	var bank = "";
+	var bank = "forip";
 	this.conString = `postgres://${user}:${pswd}@${host}:${port}/${bank}`;
 	this.result;
 };

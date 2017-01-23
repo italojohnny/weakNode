@@ -1,4 +1,5 @@
 *.swp
+app/**
 
 # Logs
 logs
