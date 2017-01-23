@@ -2,12 +2,21 @@
  *
  */
 
+// Variaveis globais -----------------------------------------------------------
 var layoutModel = analyzeWidth(window.innerWidth);
+var mainMenu = document.getElementById("default-header-button-menu");
 
+// Eventos ---------------------------------------------------------------------
 window.addEventListener("resize", function(){
 	layoutModel = analyzeWidth(window.innerWidth);
-}); 
+});
 
+mainMenu.addEventListener("click", function () {
+	layoutModel === "fullview" ? layoutModel = "standard" : layoutModel = "fullview";
+	resetLayout(layoutModel);
+});
+
+// Funcoes ---------------------------------------------------------------------
 function analyzeWidth (width) {
 	var model;
 	if (width < 800) 
@@ -15,13 +24,15 @@ function analyzeWidth (width) {
 	else 
 		model = "standard";
 
-	if (model != layoutModel) {
-		switch (model) {
-			case "fullview": setFullViewLayout(); break;
-			default: setStandardLayout();
-		}
-	}
+	resetLayout(model);
 	return model;
+}
+
+function resetLayout (model) {
+	switch (model) {
+		case "fullview": setFullViewLayout(); break;
+		default: setStandardLayout();
+	}
 }
 
 function setFullViewLayout() {

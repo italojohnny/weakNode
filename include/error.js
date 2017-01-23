@@ -12,11 +12,16 @@ var Error = function() {
 Error.prototype.makePage = function(titulo, subtitulo, mensagem) {
 	var page = "<!DOCTYPE html><html lang='pt-br'>"+
 	"<head><meta charset='utf-8'><title>"+titulo+"</title></head><body>"+
-	"<h1>"+ titulo +"</h1>"+
-	"<h3>"+ subtitulo+"</h3><hr>"+
-	"<pre>"+ mensagem + "</pre><hr>"+
-	"<a href='/'>Voltar</a>"+
-	"</body></html>";
+	"<h1>"+ titulo +"</h1><h3>"+ subtitulo+"</h3><hr>"+
+	"<pre>"+ mensagem + "</pre><hr>";
+
+	if (mensagem.message)
+		page += "<pre>"+ mensagem.message + "</pre><hr>";
+	if (mensagem.stack)
+		page += "<pre>"+ mensagem.stack + "</pre><hr>";
+
+	page +=	"<a href='/'>Voltar</a></body></html>";
+
 	return page;
 };
 

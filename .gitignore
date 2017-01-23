@@ -1,5 +1,7 @@
 *.swp
-/app/*
+app/node_modules
+app/static/public/css/
+app/static/public/js/
 
 # Logs
 logs

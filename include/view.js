@@ -102,7 +102,7 @@ View.prototype.replaceInclude = function (callback) {
 				fileAux1 = fileAux1.replace(erKeyInclude, fileAux2)
 
 			} else throw `Erro durante processo de inclusao de arquivo:\nNão foi possivel abrir "${caminho}${result}".`;
-		} else console.log("nao deu" + fileAux1.match(erKeyInclude)[2]);
+		} else console.log("nao deu" + fileAux1.match(erKeyInclude)[2]); // TODO
 	}
 	this.finalyPage = fileAux1;
 	callback(this);

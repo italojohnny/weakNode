@@ -41,8 +41,6 @@ Controller.prototype.main = function (callback) {
 Controller.prototype.standardizeOutput = function (retorno, callback) {
 	var typeOutput = typeof(retorno);
 
-	console.log(typeOutput);
-
 	// se o retorno e uma string terminada em ".html"
 	if (typeOutput === "string" && retorno.match(/\.html$/))
 		this.output = {file:retorno, vars:null};

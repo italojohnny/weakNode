@@ -14,7 +14,7 @@ Actor.prototype.getEmail = function() { return this.email; };
 
 Actor.prototype.teste = function(callback) {
 	var db = new DB();
-	var defer = db.exec("select * from f_novo_menu limit 1").then((dados) => {
+	var defer = db.exec("select * from f_novo_menu").then((dados) => {
 		this.result = dados;
 		callback(dados);
 	});

@@ -20,9 +20,9 @@ var Route = function (url, metodo, variaveis) {
 	try { this.analyzeURL(function(that) {
 		try { that.evokeControl(function(that) {
 			try { that.evokeView(function(that) {
-			});} catch (e) { that.makeError("View", "500", e, function(){}); }
-		});} catch (e){ that.makeError("Controller", "500", e.message+"\n\n"+e.stack, function(){}); }
-	});} catch (e) { this.makeError("Route", "500", e, function(){}); }
+			});} catch (e) { that.makeError("View", "503", e, function(){}); }
+		});} catch (e){ that.makeError("Controller", "502", e, function(){}); }
+	});} catch (e) { this.makeError("Route", "501", e, function(){}); }
 };
 
 Route.prototype.evokeControl = function(callback) {
@@ -70,7 +70,7 @@ Route.prototype.analyzeURL = function (callback) {
 		if (this.metodo !== "POST")
 			this.inputVars = regexResult[3].split("/");
 
-	} else if (regexResult = this.url.match(/^\/static\/(.*\.)(css|js|png|jpg|gif)/)) {
+	} else if (regexResult = this.url.match(/^\/static\/(.*\.)(css|js|png|jpe?g|gif)/)) {
 		this.contentType = this.setContentType(regexResult[2]);
 		this.fileName = regexResult[0];
 
