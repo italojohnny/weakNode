@@ -19,9 +19,9 @@ mainMenu.addEventListener("click", function () {
 // Funcoes ---------------------------------------------------------------------
 function analyzeWidth (width) {
 	var model;
-	if (width < 800) 
+	if (width < 800)
 		model = "fullview";
-	else 
+	else
 		model = "standard";
 
 	resetLayout(model);

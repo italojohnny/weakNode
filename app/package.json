@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+	  "make-min":"echo \"Gerando arquivos minificados\" && gulp css && gulp js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

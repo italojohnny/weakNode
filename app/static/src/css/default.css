@@ -8,7 +8,6 @@
 	--espacamento: 40px;
 	--menu-largura: 180px;
 }
-
 html, body {min-height:100%; padding:0; margin:0; background-color:var(--default-body-background-color);font-family:sans-serif;}
 
 #default-header {
@@ -34,6 +33,9 @@ html, body {min-height:100%; padding:0; margin:0; background-color:var(--default
 	float:left;
 	width:calc(100% - 140px);/* button-menu(40) + user-menu(100) = 140*/
 	height:100%;
+	font-weight:bold;
+	color:white;
+	text-shadow:2px 2px black;
 }
 
 .default-header-span{
