@@ -1,7 +1,7 @@
 *.swp
 app/node_modules
-app/static/public/css/
-app/static/public/js/
+app/static/public/css/all.min.css
+app/static/public/js/all.min.css
 
 # Logs
 logs
