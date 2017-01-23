@@ -32,8 +32,8 @@ View.prototype.readFile = function (callback) {
 			}
 		} else this.finalyPage = this.inputVars.toString();
 	} else if (this.contentType.match(/image/)) {
-		if (fs.existsSync('.' + this.fileName)) {
-			this.finalyPage = fs.readFileSync("." + this.fileName, function () {});
+		if (fs.existsSync(this.filePath + this.fileName)) {
+			this.finalyPage = fs.readFileSync(this.filePath + this.fileName, function () {});
 		} else throw `Arquivo ".${this.fileName}" não foi encontrado.`;
 	} else throw "Não há suporte para o conteúdo solicitado";
 	callback();
