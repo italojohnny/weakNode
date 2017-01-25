@@ -28,7 +28,7 @@ Controller.prototype.main = function (callback) {
 	else throw "Arquivo '"+ this.fileName +".js' não existe no diretório '"+ this.filePath +"'";
 
 	// se existir a funcao no modulo, execute ela
-	if (genericModule[this.functionName])
+	if (typeof(genericModule[this.functionName]) === "function")
 		this.output = genericModule[this.functionName](this.inputVariables, function(retorno) {
 			returnResult = retorno;
 		});
