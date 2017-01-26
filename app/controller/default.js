@@ -31,10 +31,11 @@ exports.teste9 = function (req, res) {
 //}}}
 
 exports.teste0 = function (req, res) {
+	req.session.title="Teste 0";
 	var john = new Actor();
 	var nome = john.getFirstName();
 	var email = john.getEmail();
 	john.teste(function(dados){
 	});
-	res({render:"default/index.html", var1:req, var2:email, var3:nome});
+	res({render:"default/index.html", var1:"italo johnny dos anjos", var2:email, var3:nome});
 }

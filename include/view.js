@@ -30,7 +30,7 @@ View.prototype.readFile = function (callback) {
 					}); } catch (e) { throw `Include > ${e}`; }
 				}); } catch (e) { throw `Extend > ${e}`; }
 			}
-		} else this.finalyPage = this.inputVars.toString();
+		} else this.finalyPage = this.inputVars.output.toString();
 	} else if (this.contentType.match(/image/)) {
 		if (fs.existsSync(this.filePath + this.fileName)) {
 			this.finalyPage = fs.readFileSync(this.filePath + this.fileName, function () {});
@@ -108,10 +108,10 @@ View.prototype.replaceInclude = function (callback) {
 	callback(this);
 };
 
-View.prototype.replacePrint = function (callback) {
+View.prototype.replacePrint = function (callback) { // TODO aperfeicoar codigo para tornar claro
 	var fileAux1 = this.finalyPage.toString();
 	var erPrints = /<!--\[\[print .+\]\]-->/g;
-	var erKeyPrint = /<!--\[\[print (.+)\]\]-->/;
+	var erKeyPrint = /<!--\[\[print (.+|session\..+)\]\]-->/;
 	var result;
 	var qtd = 0;
 	if (qtd = fileAux1.match(erPrints)) qtd = qtd.length;
@@ -119,8 +119,19 @@ View.prototype.replacePrint = function (callback) {
 		result = fileAux1.match(erKeyPrint);
 		if (result) {
 			result = result[1];
-			if (this.inputVars && typeof(this.inputVars) === "object" && result in this.inputVars) {
-				fileAux1 = fileAux1.replace(erKeyPrint, this.inputVars[result]);
+			if (this.inputVars && typeof(this.inputVars.output) === "object" && result in this.inputVars.output) {
+				fileAux1 = fileAux1.replace(erKeyPrint, this.inputVars.output[result]);
+
+			} else if (this.inputVars && typeof(this.inputVars.output) === "object" && result.match(/^session\..+/)) {
+				//TRABALHANDO AQUI
+				var aux = result.match(/^session\.(.+)/);
+				fileAux1 = fileAux1.replace(erKeyPrint, this.inputVars.session[aux[1]]);
+				/*
+				 * Atualmente a view só podera encontrar as variaveis que estao em output e session
+				 * futuramente deseja-se que o usuario do framework possa declarar qualquer variavel
+				 * e utilizar livremente na view.
+				 */
+
 			} else throw `Erro durante processo de impressão das variaveis.\nA página está esperando pela variavel "${result}".`;
 		}
 	}
