@@ -12,9 +12,9 @@ Actor.prototype.getFirstName = function() {	return this.first_name; };
 Actor.prototype.setEmail = function(email) { this.email = email; };
 Actor.prototype.getEmail = function() { return this.email; };
 
-Actor.prototype.teste = function(callback) {
+Actor.prototype.consulta = function(callback) {
 	var db = new DB();
-	var defer = db.exec("select * from f_novo_menu").then((dados) => {
+	var defer = db.exec("select * from f_bilhetes_chamadas limit 10").then((dados) => {
 		this.result = dados;
 		callback(dados);
 	});

@@ -31,9 +31,7 @@ Controller.prototype.main = function (callback) {
 	if (typeof(genericModule[this.functionName]) === "function") {
 
 		var request = {input:this.inputVariables, session:appIndex()}; // TODO aperfeicoar esse parametro
-
 		this.output = genericModule[this.functionName](request, function(retorno) {
-			//console.log(request.session.title);
 			returnResult = {output: retorno, session:request.session};
 		});
 

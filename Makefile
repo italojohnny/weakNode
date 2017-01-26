@@ -1,3 +1,6 @@
+default:
+	cd app; npm run nodemon
+
 
 test-post:
 	curl -H "Content-Type: application/json" -d '{"name":"Death Star"}' http://127.0.0.1:3000/weapons
@@ -14,4 +17,6 @@ test-delete:
 
 app:
 	git submodule add http://git.forip.com.br/forip/newHost.git app
-	
+
+work:
+	vim include/route.js include/controller.js include/view.js

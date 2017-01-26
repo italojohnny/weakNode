@@ -123,15 +123,13 @@ View.prototype.replacePrint = function (callback) { // TODO aperfeicoar codigo p
 				fileAux1 = fileAux1.replace(erKeyPrint, this.inputVars.output[result]);
 
 			} else if (this.inputVars && typeof(this.inputVars.output) === "object" && result.match(/^session\..+/)) {
-				//TRABALHANDO AQUI
 				var aux = result.match(/^session\.(.+)/);
 				fileAux1 = fileAux1.replace(erKeyPrint, this.inputVars.session[aux[1]]);
-				/*
-				 * Atualmente a view só podera encontrar as variaveis que estao em output e session
-				 * futuramente deseja-se que o usuario do framework possa declarar qualquer variavel
-				 * e utilizar livremente na view.
-				 */
-
+				/* TRABALHANDO AQUI
+				* Atualmente a view só podera encontrar as variaveis que estao em output e session
+				* futuramente deseja-se que o usuario do framework possa declarar qualquer variavel
+				* e utilizar livremente na view.
+				*/
 			} else throw `Erro durante processo de impressão das variaveis.\nA página está esperando pela variavel "${result}".`;
 		}
 	}
